@@ -1,0 +1,18 @@
+{
+  "name": "pingdom-client",
+  "version": "0.1.0",
+  "main": "./lib/pingdom.js",
+  "description": "Pingdom API Client",
+  "contributors": [
+    { "name": "Tony Heupel", "email": "tonyheupel@gmail.com"},
+    { "name": "Grant Goodale", "email": "<ggoodale@moreblinktag.com>"}
+  ],
+  "directories": {"lib": "./lib", "test": "./test"},
+  "dependencies": {
+    "request": ">=1.9.6",
+    "sprintf": ">=0.1.1"
+  },
+  "engines": {"node": ">=0.4.0"},
+  "scripts": {
+  }
+}
