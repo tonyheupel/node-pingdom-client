@@ -9,8 +9,7 @@
   ],
   "directories": {"lib": "./lib", "test": "./test"},
   "dependencies": {
-    "request": ">=1.9.6",
-    "sprintf": ">=0.1.1"
+    "request": ">=1.9.6"
   },
   "engines": {"node": ">=0.4.0"},
   "scripts": {
