@@ -7,7 +7,7 @@
     { "name": "Tony Heupel", "email": "tonyheupel@gmail.com"},
     { "name": "Grant Goodale", "email": "<ggoodale@moreblinktag.com>"}
   ],
-  "directories": {"src": "./src", "lib": "./lib", "test": "./test"},
+  "directories": {"lib": "./lib", "test": "./test"},
   "dependencies": {
     "request": ">=1.9.6"
   },
