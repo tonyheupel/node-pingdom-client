@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "./lib/pingdom.js",
   "description": "Pingdom API Client",
-  "author": { "Tony Heupel <tonyheupel@gmail.com"},
+  "author": "Tony Heupel <tonyheupel@gmail.com",
   "contributors": [
     { "name": "Tony Heupel", "email": "tonyheupel@gmail.com"},
     { "name": "Grant Goodale", "email": "<ggoodale@moreblinktag.com>"}
