@@ -8,20 +8,19 @@
     { "name": "Tony Heupel", "email": "tonyheupel@gmail.com"},
     { "name": "Grant Goodale", "email": "<ggoodale@moreblinktag.com>"}
   ],
-  "directories": {"lib": "./lib", "test": "./test"},
+  "directories": {"src": "./src", "lib": "./lib", "test": "./test"},
   "dependencies": {
-    "request": ">=1.9.6"
-  },
-  "devDependencies": {
+    "request": ">=1.9.6",
     "coffee-script": ">=1.2.1-pre",
     "vows": ">=0.6.0"
   },
-  "repository":   {
+  "repository": {
     "type": "git",
     "url": "git://github.com/jashkenas/coffee-script.git"
   },
-  "engines": {"node": ">=0.6.0"},
+  "engines": { "node": ">=0.6.0" },
   "scripts": {
-    "test": "vows test/*.coffee --spec"
+    "test": "vows test/*.coffee --spec",
+    "preinstall": "cake build"
   }
 }
