@@ -1,41 +1,42 @@
 http    = require 'http'
 url     = require 'url'
 request = require 'request'
+qs      = require 'querystring'
 
 # new Pingdom(apiKey, username, password[, version='2.0'])
 class Pingdom
   constructor: (@apiKey, @username, @password, @version='2.0') ->
     return new Pingdom(apiKey, username, password, version) unless this instanceof Pingdom
-      
+
     @checks = []
     @baseUrl = "https://api.pingdom.com/api/#{@version}"
 
 
-  getCurrentServerTime: (dataCallback) ->
+  getCurrentServerTime: (err, dataCallback) ->
     requestUrl = "#{@baseUrl}/servertime"
     @apiCall requestUrl, dataCallback
 
-  
-  # Memoized 
+
+  # Memoized
   # client.getCheckList([force=false,] dataCallback(checks))
   getCheckList: (force, dataCallback) ->
     if arguments.length == 1
       dataCallback = force
       force = false
-    
+
     return @checks unless force || @checks.length == 0
 
     requestUrl = "#{@baseUrl}/checks"
 
-    @apiCall requestUrl, (checks) ->
+    @apiCall requestUrl, (err, checks) ->
       @checks = checks
-      dataCallback(checks) if dataCallback
+      process.nextTick () -> dataCallback(err, checks) if dataCallback
 
-  
+
   getDetailedCheckInfo: (checkId, dataCallback) ->
     requestUrl = "#{@baseUrl}/checks/#{checkId}"
     @apiCall requestUrl, dataCallback
-  
+
 
   getSummaryAverage: (checkId, options, dataCallback) ->
     # Name  Description                                     Type    Req?  Default
@@ -44,12 +45,12 @@ class Pingdom
     # probes  Filter to only use results from a list of probes. Format is a comma separated list of probe identifiers String  no  all probes
     # includeuptime Include uptime information  Boolean no  false
     # bycountry Split response times into country groups  Boolean no  false
-    # byprobe Split response times into probe groups  Boolean no  false 
+    # byprobe Split response times into probe groups  Boolean no  false
 
-    requestUrl = "#{@baseUrl}/summary.average/#{checkId}/?#{Pingdom.toQueryString(options)}"
+    requestUrl = "#{@baseUrl}/summary.average/#{checkId}/?#{qs.stringify(options)}"
     @apiCall requestUrl, dataCallback
-  
-  
+
+
   # getSummaryHoursOfDay(checkId[, options], dataCallback)
   getSummaryHoursOfDay: (checkId, options={}, dataCallback) ->
     # Name        Description
@@ -61,32 +62,29 @@ class Pingdom
     #  dataCallback = options
     #  options = {}
 
-    requestUrl = "#{@baseUrl}/summary.hoursofday/#{checkId}/?#{Pingdom.toQueryString(options)}"
+    requestUrl = "#{@baseUrl}/summary.hoursofday/#{checkId}/?#{qs.stringify(options)}"
     @apiCall requestUrl, dataCallback
-  
+
 
   apiCall: (requestUrl, dataCallback) ->
     @auth = 'Basic ' + new Buffer(@username + ':' + @password).toString('base64') unless @auth  # Memoize the auth header
-  
-    options = 
+
+    options =
       uri: url.parse(requestUrl),
       headers:
-        'App-Key': @apiKey, 
-        'Authorization': @auth 
+        'App-Key': @apiKey,
+        'Authorization': @auth
 
     req = request options, (error, response, body) ->
-      if !error && response.statusCode == 200
-        dataCallback(JSON.parse(body))
+      if error || response.statusCode != 200
+        process.nextTick () -> dataCallback error
       else
-        console.log "Error: #{error}\nResponse: #{response.body}"
+        data = JSON.parse response.body
+        if data.error
+          process.nextTick () -> dataCallback data.error
+        else
+          process.nextTick () -> dataCallback null, data
 
-  
-  @toQueryString: (options) ->
-    pairs = for key, value of options
-      "#{key}=#{value}"
-
-    pairs.join('&')
-  
 
 
 
