@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jashkenas/coffee-script.git"
+    "url": "git://github.com/tchype/node-pingdom-client.git"
   },
   "engines": { "node": ">=0.6.0" },
   "scripts": {
